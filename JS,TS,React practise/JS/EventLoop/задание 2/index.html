@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #progress-bar {
+            height: 20px;
+            width: 500px;
+            background-color: #01e7f8;
+            margin: 50px 50px 0 50px;
+            transform-origin: left;
+        }
+
+        #time {
+            margin: 0 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="progress-bar"></div>
+    <div id="time"></div>
+    <script>
+        
+        function progress(time) {
+            const minTime = 2000
+
+            if (time < minTime) {
+                time = minTime
+            }
+
+            const getProgressBar = document.querySelector('#progress-bar')
+
+            getProgressBar.style.transform = 'scaleX(0)';
+            getProgressBar.style.transition = `transform ${time}ms linear`
+
+            setTimeout(() => {
+                getProgressBar.style.transform = 'scaleX(1)';
+            }, 0);
+
+            let count = 0
+
+            const timer = setInterval(() => {
+                const showTimer = document.querySelector('#time');
+                count++
+                showTimer.textContent = `${count} с`
+            }, 1000)
+
+            setTimeout(() => {
+                clearInterval(timer)
+            }, time)
+        }
+        progress(7000)
+
+    </script>
+</body>
+
+</html>

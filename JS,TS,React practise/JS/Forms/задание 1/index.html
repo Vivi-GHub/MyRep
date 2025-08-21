@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form__checkbox {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form__textarea {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form__textarea textarea {
+            width: 300px;
+            height: 100px;
+            resize: none;
+        }
+
+        button {
+            width: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <form class="form" action="#" method="post">
+        <label>
+            Имя пользователя: <input class="form__input-name" type="text">
+        </label>
+        <label>
+            Email: <input class="form__input-email" type="email">
+        </label>
+        <div class="form__radio">
+            <label>Пол:</label>
+            <label><input class="form__radio-button" value="Мужской" type="radio" name="gender" checked>Мужской</label>
+            <label><input class="form__radio-button" value="Женский" type="radio" name="gender">Женский</label>
+        </div>
+        <label>
+            Оценка сервиса: <input class="form__range" type="range" min="1" max="10" step="1">
+        </label>
+        <div class="form__checkbox">
+            <label>Интересы пользователя:</label>
+            <label><input class="form__checkbox-button" value="Спорт" type="checkbox">Спорт</label>
+            <label><input class="form__checkbox-button" value="Музыка" type="checkbox">Музыка</label>
+            <label><input class="form__checkbox-button" value="Кино" type="checkbox">Кино</label>
+            <label><input class="form__checkbox-button" value="Путешествия" type="checkbox">Путешествия</label>
+        </div>
+        <div class="form__textarea">
+            <label> Дополнительные комментарии:</label>
+            <textarea class="form__textarea-button"></textarea>
+        </div>
+        <button type="submit">Отправить</button>
+    </form>
+    <div class="result"></div>
+
+    <script>
+        const form = document.querySelector('form')
+        const inputName = document.querySelector('.form__input-name')
+        const inputEmail = document.querySelector('.form__input-email')
+        const inputTextarea = document.querySelector('textarea')
+        const inputRating = document.querySelector('.form__range')
+        const buttonEl = document.querySelector('button')
+
+        inputName.addEventListener('input', function () {
+            inputName.setCustomValidity('')
+        })
+
+        inputEmail.addEventListener('input', function () {
+            inputEmail.setCustomValidity('')
+        })
+
+        function validateInputs() {
+            let valid = true
+
+            if (inputName.value == '') {
+                inputName.setCustomValidity('Заполните это поле')
+                valid = false
+            }
+
+            if (inputEmail.value == '') {
+                inputEmail.setCustomValidity('Заполните это поле')
+                valid = false
+            }
+
+            return valid
+        }
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault()
+
+            if (!validateInputs()) {
+                form.reportValidity()
+                return
+            }
+
+            const inputsGender = document.querySelectorAll('.form__radio-button')
+            const genderSelected = [...inputsGender].find(input => input.checked)
+
+            const inputsInterests = document.querySelectorAll('.form__checkbox-button')
+            const interestsSelected = [...inputsInterests].filter(input => input.checked).map(input => input.value)
+
+            const newHTML = `
+                <h2>Информация о пользователе:</h2>
+                <p>Имя: ${inputName.value}</p>
+                <p>Email: ${inputEmail.value}</p>
+                <p>Пол: ${genderSelected.value}</p>
+                <p>Оценка сервиса: ${inputRating.value}</p>
+                <p>Интересы пользователя: ${interestsSelected}</p>
+                <p>Комментарии: ${inputTextarea.value}</p>`
+
+            document.querySelector('.result').innerHTML = newHTML
+        });
+
+    </script>
+</body>
+
+</html>

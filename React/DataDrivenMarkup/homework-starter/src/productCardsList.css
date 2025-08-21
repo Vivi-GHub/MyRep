@@ -1,0 +1,13 @@
+.cards-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); 
+    gap: 20px;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+
+.cards-list li {
+    display: flex;
+}

@@ -1,0 +1,275 @@
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+<body>
+    <form id="film-form">
+        <label for="title">Название:</label><br>
+        <input type="text" id="title" name="title"><br>
+        <label for="genre">Жанр:</label><br>
+        <input type="text" id="genre" name="genre"><br>
+        <label for="releaseYear">Год:</label><br>
+        <input type="text" id="releaseYear" name="releaseYear"><br>
+        <input type="checkbox" id="isWatched" name="isWatched">
+        <label for="isWatched">Успели посмотреть?</label><br>
+        <input type="submit" value="Submit">
+    </form>
+    <div class="wrapper">
+        <form id="filter">
+            <input type="text" id="filter-title" name="filter-title" placeholder="Название фильма">
+            <input type="text" id="filter-genre" name="filter-genre" placeholder="Жанр">
+            <input type="text" id="filter-releaseYear" name="filter-releaseYear" placeholder="Год релиза">
+            <select name="filter-isWatched" id="filter-isWatched">
+                <option value="all">Все</option>
+                <option value="watched">Просмотрен</option>
+                <option value="notWatched">Не просмотрен</option>
+            </select>
+        </form>
+        <button class="deleteAll" type="button">Удалить всё</button>
+    </div>
+    <table id="film-table">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Жанр</th>
+                <th>Год</th>
+                <th>Успели посмотреть?</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody id="film-tbody">
+            <!-- Rows will be inserted here -->
+        </tbody>
+    </table>
+    <script>
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const form = document.querySelector('#film-form');
+
+            if (!validation()) {
+                form.reportValidity()
+                return
+            }
+
+            const title = document.getElementById("title").value;
+            const genre = document.getElementById("genre").value;
+            const releaseYear = document.getElementById("releaseYear").value;
+            const isWatched = document.getElementById("isWatched").checked;
+
+            const film = {
+                title: title,
+                genre: genre,
+                releaseYear: releaseYear,
+                isWatched: isWatched,
+            };
+
+            addFilm(film);
+        }
+
+        async function addFilm(film) {
+            // const films = JSON.parse(localStorage.getItem("films")) || [];
+            // films.push(film);
+            // localStorage.setItem("films", JSON.stringify(films));
+
+            // console.log(film);
+            await fetch("https://sb-film.skillbox.cc/films", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    email: "ovikdevil@gmail.com",
+                },
+                body: JSON.stringify(film),
+            });
+
+            document.getElementById("film-form").reset();
+
+            renderTable();
+        }
+
+        async function renderTable() {
+            // const films = JSON.parse(localStorage.getItem("films")) || [];
+            const filmsResponse = await fetch("https://sb-film.skillbox.cc/films", {
+                headers: {
+                    email: "ovikdevil@gmail.com",
+                },
+            });
+            const films = await filmsResponse.json();
+
+            const filmTableBody = document.getElementById("film-tbody");
+
+            // Clear table body first
+            filmTableBody.innerHTML = "";
+
+            // Then add new rows
+            films.forEach((film, index) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+            <td>${film.title}</td>
+            <td>${film.genre}</td>
+            <td>${film.releaseYear}</td>
+            <td>${film.isWatched ? "Да" : "Нет"}</td>
+            <td><button class="deleteFilm" data-id= ${film.id}>Удалить</button></td>
+            `;
+                filmTableBody.appendChild(row);
+            });
+
+            // Кнопки "Удалить"
+            const deleteBtns = document.querySelectorAll('.deleteFilm');
+
+            deleteBtns.forEach(button => {
+                button.addEventListener('click', () => {
+                    const id = button.dataset.id;
+                    deleteFilm(id);
+                });
+            });
+        }
+
+        async function deleteFilm(id) {
+            await fetch(`https://sb-film.skillbox.cc/films/${id}`, {
+                method: "DELETE",
+                headers: {
+                    email: "ovikdevil@gmail.com",
+                },
+            });
+            renderTable();
+        }
+
+        document
+            .getElementById("film-form")
+            .addEventListener("submit", handleFormSubmit);
+
+        // Display films on load
+        renderTable();
+
+        // Фильтр
+        const filterTitle = document.querySelector('#filter-title');
+        const filterGenre = document.querySelector('#filter-genre');
+        const filterReleaseYear = document.querySelector('#filter-releaseYear');
+        const filterIsWatched = document.querySelector('#filter-isWatched');
+
+        filterTitle.addEventListener('input', useFilter)
+        filterGenre.addEventListener('input', useFilter)
+        filterReleaseYear.addEventListener('input', useFilter)
+        filterIsWatched.addEventListener('input', useFilter)
+
+        async function useFilter() {
+            const response = await fetch("https://sb-film.skillbox.cc/films", {
+                headers: {
+                    email: "ovikdevil@gmail.com",
+                },
+            })
+            const films = await response.json()
+
+            const filteredFilms = films.filter(film => {
+                const includeTitle = film.title.toLowerCase().includes(filterTitle.value.toLowerCase())
+                const includeGenre = film.genre.toLowerCase().includes(filterGenre.value.toLowerCase())
+                const includeReleaseYear = film.releaseYear.includes(filterReleaseYear.value)
+
+                let includeIsWatched = true
+                if (filterIsWatched.value === 'watched') {
+                    includeIsWatched = film.isWatched
+                } else if (filterIsWatched.value === 'notWatched') {
+                    includeIsWatched = !film.isWatched
+                }
+
+                return includeTitle && includeGenre && includeReleaseYear && includeIsWatched
+            })
+
+            const filmTableBody = document.getElementById("film-tbody");
+
+            filmTableBody.innerHTML = "";
+
+            filteredFilms.forEach(film => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+            <td>${film.title}</td>
+            <td>${film.genre}</td>
+            <td>${film.releaseYear}</td>
+            <td>${film.isWatched ? "Да" : "Нет"}</td>
+            <td><button class="deleteFilm" data-id="${film.id}">Удалить</button></td>
+        `;
+                filmTableBody.appendChild(row);
+            });
+
+            const deleteBtns = document.querySelectorAll('.deleteFilm');
+
+            deleteBtns.forEach(button => {
+                button.addEventListener('click', () => {
+                    const id = button.dataset.id;
+                    deleteFilm(id);
+                });
+            });
+        }
+
+        // Кнопка "Удалить все"
+        const deleteAllBtn = document.querySelector('.deleteAll');
+
+        deleteAllBtn.addEventListener('click', getAllFilms)
+
+        async function getAllFilms() {
+            const response = await fetch('https://sb-film.skillbox.cc/films', {
+                headers: {
+                    email: "ovikdevil@gmail.com",
+                }
+            })
+            const films = await response.json()
+
+            for (const film of films) {
+                await clearAllFilms(film.id)
+            }
+
+            renderTable()
+        }
+
+        async function clearAllFilms(id) {
+            const response = await fetch(`https://sb-film.skillbox.cc/films/${id}`, {
+                method: "DELETE",
+                headers: {
+                    email: "ovikdevil@gmail.com",
+                }
+            })
+        }
+
+        const title = document.getElementById("title");
+        const genre = document.getElementById("genre");
+        const releaseYear = document.getElementById("releaseYear");
+
+        title.addEventListener('input', function () {
+            title.setCustomValidity('')
+        })
+
+        genre.addEventListener('input', function () {
+            genre.setCustomValidity('')
+        })
+
+        releaseYear.addEventListener('input', function () {
+            releaseYear.setCustomValidity('')
+        })
+
+        function validation() {
+            let valid = true
+
+            if (title.value == '') {
+                title.setCustomValidity('Заполните это поле')
+                valid = false
+            }
+            if (genre.value == '') {
+                genre.setCustomValidity('Заполните это поле')
+                valid = false
+            }
+            if (releaseYear.value == '') {
+                releaseYear.setCustomValidity('Заполните это поле')
+                valid = false
+            }
+
+            return valid
+        }
+
+    </script>
+</body>
+
+</html>

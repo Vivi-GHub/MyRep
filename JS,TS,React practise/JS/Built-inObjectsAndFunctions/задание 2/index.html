@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: #c0d2d6;
+        }
+
+        div {
+            background-color: #fff;
+            width: auto;
+            height: auto;
+            border-radius: 11px;
+            padding: 20px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+
+        }
+
+        input {
+            padding: 10px 15px;
+            border-radius: 10px;
+            width: 150px;
+            border: 1px solid #57595b;
+            margin: 0 8px 0 0;
+        }
+
+        button {
+            border: none;
+            background-color: #0e9cef;
+            border-radius: 10px;
+            padding: 10px;
+            width: 100px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #79c6f3;
+        }
+
+        p  {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <form action="#" method="post">
+            <input type="text" placeholder="ПРОМОКОД">
+            <button type="submit"><b>Применить</b></button>
+        </form>
+    </div>
+    <script>
+
+        const promocodeObj = {
+        promocode: "PROM50",
+        gift: "Скидка 50%"
+        }
+
+        const form = document.querySelector('form');
+        const input = document.querySelector('input');
+        const div = document.querySelector('div');
+
+        let text = null
+        
+        function setPromocodeCookie(promocode, days = 30) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = `promocode=${encodeURIComponent(promocode)};${expires};path=/`;
+        }
+
+        function getPromocodeCookie() {
+            const name = "promocode=";
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const cookieArray = decodedCookie.split(';');
+
+            for(let i = 0; i < cookieArray.length; i++) {
+                let cookie = cookieArray[i];
+                while (cookie.charAt(0) === ' ') {
+                cookie = cookie.substring(1);
+                }
+                if (cookie.indexOf(name) === 0) {
+                return cookie.substring(name.length, cookie.length);
+                }
+            }
+            return null;
+        }
+
+        window.addEventListener('load', () => {
+            const savedPromo = getPromocodeCookie();
+            if (savedPromo && savedPromo === promocodeObj.promocode) {
+                createText();
+            }
+        });
+
+        function createText () {
+            text = document.createElement('p');
+            text.textContent = `Промокод применен. ${promocodeObj.gift}`
+            text.style.color = 'green'
+            input.style.color = 'green'
+            div.appendChild(text);
+        }
+
+        form.addEventListener('submit', (e)=> {
+            e.preventDefault()
+
+            if (text) {
+                text.remove()
+                text = null
+            }
+            
+            if (input.value == promocodeObj.promocode){
+                createText()
+                setPromocodeCookie(input.value)
+            } else {
+                text = document.createElement('p');
+                text.textContent = 'Промокод введён неверно'
+                text.style.color = 'red'
+                div.appendChild(text);
+            }
+        })
+    </script>
+</body>
+</html>

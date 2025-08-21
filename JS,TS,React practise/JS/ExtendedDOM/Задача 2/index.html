@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const ulEl = document.createElement('ul')
+        document.body.append(ulEl)
+
+        const addBtn = document.createElement('button')
+        addBtn.textContent = 'Добавить элемент'
+        document.body.append(addBtn)
+
+        addBtn.onclick = function() {
+            const liEl = document.createElement('li')
+            liEl.textContent = 'Новый элемент списка'
+            ulEl.append(liEl)
+        }
+
+        const removeBtn = document.createElement('button')
+        removeBtn.textContent = 'Удалить элемент'
+        document.body.append(removeBtn)
+
+        removeBtn.onclick = function() {
+            ulEl.removeChild(ulEl.lastElementChild)
+        }
+
+    </script>
+</body>
+</html>

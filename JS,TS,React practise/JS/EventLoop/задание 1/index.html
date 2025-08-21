@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container"></div>
+    <script>
+        // функция рандомного времени
+        function getRandomTime(min = 2000, max = 5000) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        // функции возвращения промиса
+        function returnURLFirstGroup () {
+            const urls = [
+                'img/cat1.jpg',
+                'img/cat2.jpg',
+                'img/cat3.jpg',
+            ]
+
+            return new Promise((resolve) => {
+                setTimeout(()=>{
+                    resolve (urls)
+                }, getRandomTime ())
+            })
+        }
+
+        function returnURLSecondGroup () {
+            const urls = [
+                'img/dog1.jpg',
+                'img/dog2.jpg',
+                'img/dog3.jpg',
+            ]
+
+            return new Promise((resolve) => {
+                setTimeout(()=>{
+                    resolve (urls)
+                }, getRandomTime ())
+            })
+        }
+        
+        // Помещаем изображения в .container
+        function putImagesInContainer(urls) {
+            const container = document.querySelector('.container');
+
+            urls.forEach(url => {
+                const img = document.createElement('img')
+                img.setAttribute('src', url)
+                container.append(img)
+            });
+        }
+
+        window.addEventListener('load', () => {
+            returnURLFirstGroup().then(urls => {
+                putImagesInContainer(urls)
+            })
+           returnURLSecondGroup().then(urls => {
+                putImagesInContainer(urls)
+            })
+        })
+    </script>
+</body>
+</html>
