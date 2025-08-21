@@ -1,0 +1,85 @@
+.privilege-banner {
+    padding: 0 0 60px;
+    
+    @include vp-1024 {
+        padding: 0 0 100px;
+    }
+
+    @include vp-1536 {
+       padding: 0 0 120px;
+    }
+    
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+        background-color: $color-white;
+        box-shadow: 0 4px 20px 0 #141A2B29;
+        border-radius: 16px;
+        padding: 20px 21px;
+        justify-content: center;
+        gap: 14px;
+
+        @include vp-768 {
+            padding: 24px;
+            gap: 24px;
+        }
+
+        @include vp-1024 {
+            flex-direction: row;
+            box-shadow: none;
+            background-color: transparent;
+            gap: 25px;
+            padding: 0;
+        }
+    }
+
+    &__inner {
+
+        @include vp-1024 {
+            background-color: $color-solitude-1;
+            border-radius: 16px;
+            padding: 32px 20px;
+            width: 298px;
+            min-height: 144px;
+            text-align: center;
+        }
+
+        @include vp-1024 {
+            width: 392px;
+            min-height: 122px;
+        }
+    }
+
+    &__title {
+        font-size: 18px;
+        line-height: 24px;
+        font-weight: 600;
+        color: $color-black-russian;
+        margin: 0 0 4px;
+
+        @include vp-1024 {
+            font-size: 24px;
+            line-height: 28px;
+            margin: 0 0 8px;
+        }
+    }
+
+    &__text {
+        font-size: 14px;
+        line-height: 18px;
+        color: $color-storm-grey-1;
+
+        @include vp-768 {
+            font-size: 16px;
+            line-height: 22px;
+        }
+        
+        &:not(:last-of-type) {
+            margin: 0 0 16px;
+
+            @include vp-768 {
+                margin: 0 0 24px;
+            }
+        } 
+    }
+}

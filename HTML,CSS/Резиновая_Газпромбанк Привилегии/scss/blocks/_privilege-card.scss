@@ -1,0 +1,78 @@
+.privilege-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    padding: 20px;
+    background-color: $color-solitude-1;
+    border-radius: 12px;
+    min-height: 200px;
+
+    @include vp-768 {
+        padding: 24px;
+        min-height: 280px;
+    }
+
+    @include vp-1024 {
+        background-color: transparent;
+        align-items: center;
+        gap: 0;
+        padding: 0;
+        min-height: unset;
+    }
+
+    &__title {
+        font-size: 20px;
+        line-height: 24px;
+        font-weight: 600;
+        color: $color-black-russian;
+        margin: 0;
+
+        @include vp-1024 {
+            font-size: 24px;
+            line-height: 28px;
+            margin: 0 0 16px;
+        }
+        
+    }
+
+    &__text {
+        font-size: 14px;
+        line-height: 18px;
+        color: $color-storm-grey-3;
+        margin: 0;
+
+        @include vp-1024 {
+            font-size: 16px;
+            line-height: 22px;
+        }
+    }
+
+    &__link {
+        color: #476BF0;
+
+        &:hover {
+            color: $color-free-speech-blue;
+        }
+
+        &:focus-visible {
+           color: $color-free-speech-blue;
+            outline: none;
+        }
+    }
+
+    &__icon {
+        flex-shrink: 0;
+        pointer-events: none;
+
+        @include vp-1024 {
+            background-color: $color-royal-blue-1;
+            color: $color-white;
+            border-radius: 12px;
+            padding: 16px;
+            width: 64px;
+            height: 64px;
+            margin: 0 0 20px;
+        }
+    }
+}

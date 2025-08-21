@@ -1,0 +1,37 @@
+.custom-checkbox {
+    &__label {
+        font-size: 13px;
+        line-height: 16px;
+        padding: 8px;
+        color: $color-dim-gray;
+        border: 1px solid $color-dim-gray;
+        border-radius: 4px;
+        cursor: pointer;
+        user-select: none;
+        // transition: background-color $transition-300,
+        // color $transition-300,
+        // border-color $transition-300;
+
+        @include vp-1023 {
+            padding: 6px 9px;
+            font-size: 12px;
+            line-height: 14px;
+        }
+
+        // &--active {
+            // color: $color-blue;
+            // border: 1px solid $color-blue;
+            // }
+    }
+
+    &__field:hover + &__label {
+        background-color: $color-dim-gray;
+        color: $color-white;
+    }
+
+    &__field:checked + &__label {
+        color: $color-blue;
+        background-color: transparent;
+        border-color: $color-blue;
+    }
+}

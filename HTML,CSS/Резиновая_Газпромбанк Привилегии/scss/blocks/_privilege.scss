@@ -1,0 +1,114 @@
+.privilege {
+    padding: 0 0 60px;
+    display: flex;
+    overflow: hidden;
+
+    @include vp-768 {
+        padding: 0 0 77px;
+    }
+
+    @include vp-1024 {
+        text-align: center;
+        padding: 0 0 121px;
+    }
+
+    @include vp-1536 {
+        padding: 0 0 141px;
+    }
+
+    &__wrapper {
+
+        @include vp-1024 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+
+    &__title {
+        position: relative;
+        font-size: 26px;
+        line-height: 32px;
+        font-weight: 600;
+        color: $color-black-russian;
+        margin: 0 0 16px;
+        letter-spacing: -0.02em;
+
+        @include vp-768 {
+            font-size: 28px;
+            line-height: 32px;
+        }
+
+        @include vp-1024 {
+            font-size: 40px;
+            line-height: 44px;
+            background-color: $color-white;
+            max-width: 736px;
+            letter-spacing: -0.03em;
+            margin: 0 0 20px;
+            padding: 0 20px;
+        }
+
+        &:after {
+            content: "";
+            position: absolute;
+            width: 100vw;
+            height: 2px;
+            background-color: $color-royal-blue-1;
+            top: 50%;
+            transform: translateX(-50%);
+            left: 50%;
+            z-index: -1;
+            display: none;
+
+            @include vp-1024 {
+                display: block;
+            }
+        }
+    }
+
+    &__note {
+        display: block;
+        font-size: 16px;
+        line-height: 22px;
+        color: $color-storm-grey-1;
+        margin: 0 0 28px;
+
+        @include vp-768 {
+            margin: 0 0 32px;
+        }
+
+        @include vp-1024 {
+            font-size: 18px;
+            line-height: 24px;
+            margin: 0 0 60px;
+        }
+
+        @include vp-1536 {
+          margin: 0 0 80px;
+        }
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        gap: 12px;
+
+        @include vp-768 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 13px;
+        }
+
+        @include vp-1024 {
+            gap: 60px 25px;
+        }
+
+        @include vp-1536 {
+            gap: 60px 27px;
+        }
+    }
+}
